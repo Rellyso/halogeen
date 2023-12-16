@@ -1,0 +1,22 @@
+.listItem {
+  color: #fff;
+
+  :hover {
+    color: #f5643d;
+  }
+  a {
+    display: flex;
+    gap: 10px;
+
+    svg[data-active] {
+      transform: rotate(180deg);
+    }
+  }
+  &[data-active="true"] > a {
+    color: #f5643d;
+
+    > svg {
+      transform: rotate(180deg);
+    }
+  }
+}

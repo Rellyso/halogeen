@@ -1,9 +1,30 @@
-import Image from "next/image"
-import Link from "next/link"
+'use client'
+
+import Image from 'next/image'
 import styles from './header-styles.module.scss'
-import { MenuSquare } from "lucide-react"
+import {
+  FlaskConical,
+  MenuSquare,
+  RectangleHorizontal,
+  Settings2,
+  Thermometer,
+} from 'lucide-react'
+import { useState } from 'react'
+import { NavCallout, NavMenu } from '../NavMenu'
+import { IListItem } from '../NavMenu/types'
+import { Bowl, JewelryBox, SafetyGlasses } from '@/app/assets/icons'
 
 export const Header = () => {
+  const [selectedItem, setSelectedItem] = useState<IListItem>()
+
+  const handleChangeSelectedItem = (item: IListItem) => {
+    setSelectedItem((prev) => {
+      if (prev?.id === item.id) {
+        return undefined
+      }
+      return item
+    })
+  }
 
   return (
     <div className={styles.headerContainer}>
@@ -16,31 +37,77 @@ export const Header = () => {
           priority
         />
 
-        <nav className={styles.nav}>
-          <ul>
-            <li>
-              <Link href="#">Início</Link>
-            </li>
-            <li>
-              <Link href="#">Produtos</Link>
-            </li>
-            <li>
-              <Link href="#">Laudos</Link>
-            </li>
-            <li>
-              <Link href="#">Sobre nós</Link>
-            </li>
-            <li>
-              <Link href="#">Certificações</Link>
-            </li>
-          </ul>
-        </nav>
+        <NavMenu
+          listItems={listItems}
+          onChangeItem={handleChangeSelectedItem}
+        />
 
         <button className={styles.budgetButton}>
           <MenuSquare />
-          Orçamento
+          <span>Orçamento</span>
         </button>
       </header>
+
+      {selectedItem?.subItems && (
+        <NavCallout
+          header={selectedItem?.subItemHeader}
+          subItems={selectedItem?.subItems}
+        />
+      )}
     </div>
   )
 }
+
+const listItems: IListItem[] = [
+  {
+    id: 'inicio',
+    href: '#',
+    children: 'Início',
+  },
+  {
+    id: 'produtos',
+    href: '#',
+    children: 'Produtos',
+    subItemHeader: 'Catálogo completo de itens para você',
+    subItems: [
+      {
+        id: 'lab',
+        header: 'Laboratório',
+        links: [
+          { header: 'Equipamentos', href: '#', icon: <Settings2 /> },
+          { header: 'Termômetros', href: '#', icon: <Thermometer /> },
+          { header: 'Acessórios', href: '#', icon: <SafetyGlasses /> },
+        ],
+      },
+      {
+        id: 'utils',
+        header: 'Utensílios',
+        links: [
+          {
+            header: 'Inox e Ferragens',
+            href: '#',
+            icon: <RectangleHorizontal />,
+          },
+          { header: 'Vidrarias', href: '#', icon: <FlaskConical /> },
+          { header: 'Plásticos', href: '#', icon: <JewelryBox /> },
+          { header: 'Porcelanas', href: '#', icon: <Bowl /> },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'laudos',
+    href: '#',
+    children: 'Laudos',
+  },
+  {
+    id: 'sobre',
+    href: '#',
+    children: 'Sobre nós',
+  },
+  {
+    id: 'certificacoes',
+    href: '#',
+    children: 'Certificações',
+  },
+]
