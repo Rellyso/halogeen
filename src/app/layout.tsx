@@ -1,13 +1,18 @@
 import type { Metadata } from 'next'
-import { DM_Sans, Inter } from 'next/font/google'
+import { DM_Sans as DMSans, Roboto } from 'next/font/google'
 import './globals.scss'
-import Image from 'next/image'
-import Link from 'next/link'
 import { Header } from '@/components/Header'
+import classNames from 'classnames'
+import { AppProviders } from '@/providers/AppProviders'
 
-const dmSans = DM_Sans({
+const dmSans = DMSans({
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '500', '700'],
+})
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
 })
 
 export const metadata: Metadata = {
@@ -22,9 +27,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body className={dmSans.className}>
-        <Header />
-        {children}
+      <body className={classNames(dmSans.className, roboto.className)}>
+        <AppProviders>
+          <Header />
+          {children}
+        </AppProviders>
       </body>
     </html>
   )
