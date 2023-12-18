@@ -9,21 +9,25 @@ import {
   Settings2,
   Thermometer,
 } from 'lucide-react'
-import { useState } from 'react'
-import { NavCallout, NavMenu } from '../NavMenu'
+import { NavCallout, NavMenu, NavMenuMobile } from '../NavMenu'
 import { IListItem } from '../NavMenu/types'
-import { Bowl, JewelryBox, SafetyGlasses } from '@/app/assets/icons'
+import { Bowl, JewelryBox, Menu, SafetyGlasses } from '@/app/assets/icons'
+import { useNavMenu } from '@/store/slices/menuItemsSlice'
+import { useState } from 'react'
 
 export const Header = () => {
-  const [selectedItem, setSelectedItem] = useState<IListItem>()
+  const { isActiveMenu, toggleActiveMobileMenu } = useNavMenu()
+
+  const [activeItem, setActiveItem] = useState<IListItem>()
 
   const handleChangeSelectedItem = (item: IListItem) => {
-    setSelectedItem((prev) => {
+    setActiveItem((prev) => {
       if (prev?.id === item.id) {
         return undefined
       }
       return item
     })
+    toggleActiveMobileMenu()
   }
 
   return (
@@ -46,12 +50,30 @@ export const Header = () => {
           <MenuSquare />
           <span>Orçamento</span>
         </button>
+
+        <button
+          onClick={toggleActiveMobileMenu}
+          className={styles.navMenuMobileButton}
+        >
+          <Menu />
+        </button>
       </header>
 
-      {selectedItem?.subItems && (
+      {isActiveMenu && (
+        <div className={styles.navMenuMobile}>
+          <h3>Navegue por nosso site</h3>
+
+          <NavMenuMobile
+            listItems={listItems}
+            onChangeItem={handleChangeSelectedItem}
+          />
+        </div>
+      )}
+
+      {activeItem?.subItems && isActiveMenu && (
         <NavCallout
-          header={selectedItem?.subItemHeader}
-          subItems={selectedItem?.subItems}
+          header={activeItem?.subItemHeader}
+          subItems={activeItem?.subItems}
         />
       )}
     </div>
@@ -109,5 +131,10 @@ const listItems: IListItem[] = [
     id: 'certificacoes',
     href: '#',
     children: 'Certificações',
+  },
+  {
+    id: 'contato',
+    href: '#',
+    children: 'Contato',
   },
 ]

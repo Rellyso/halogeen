@@ -1,28 +1,41 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '..'
+import { IListItem } from '@/components/NavMenu/types'
 
 export const menuItemsSlice = createSlice({
   name: 'menuItems',
   initialState: {
-    isOpenedMobileMenu: false,
+    isActiveMenu: false,
+    activeItem: undefined as IListItem | undefined,
   },
 
   reducers: {
     toggleActiveMobileMenu: (state) => {
-      state.isOpenedMobileMenu = !state.isOpenedMobileMenu
+      state.isActiveMenu = !state.isActiveMenu
+    },
+    changeSelectedItem: (state, action) => {
+      console.log(action.payload)
+
+      const item = action.payload as IListItem
+
+      if (item) {
+        state.activeItem = state.activeItem?.id === item.id ? undefined : item
+      } else {
+        state.activeItem = undefined
+      }
     },
   },
 })
 
 const { toggleActiveMobileMenu } = menuItemsSlice.actions
-const isOpenedMobileMenu = (state: RootState) => state.menuItemsSlice
+const menuItemSlice = (state: RootState) => state.menuItemsSlice
 
 export const useNavMenu = () => {
   const dispatch = useDispatch()
 
   return {
-    isActiveMobileMenu: useSelector(isOpenedMobileMenu).isOpenedMobileMenu,
+    isActiveMenu: useSelector(menuItemSlice).isActiveMenu,
     toggleActiveMobileMenu: () => dispatch(toggleActiveMobileMenu()),
   }
 }
