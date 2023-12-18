@@ -6,15 +6,15 @@ Desenvolvido com Next.js, versão 14
 
  1. Clone o repositório:
 ```
-	 git clone https://github.com/Rellyso/halogenn.git halogenn
-	 git checkout halogenn
-	 code .
+git clone https://github.com/Rellyso/halogenn.git halogenn
+git checkout halogenn
+code .
 ```
    
 2. Instale as dependências e rode o projeto:
 ```
-    pnpm install
-    pnpm dev
+pnpm install
+pnpm dev
 ```
 > **Note:** Você também pode utilizar ***npm*** caso não tenha ***pnpm*** instalado
 
